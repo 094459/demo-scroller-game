@@ -74,3 +74,10 @@ Titan Scrolling Game server listening at http://localhost:3000
 ```
 
 4/ Open a browser at http://127.0.0.1:3000 and if the angels are with you, you can now enjoy the game!
+
+
+### Note!
+
+This is only a demo, and its implementation is flawed so please do **copy** it! I am not a Javascript developer, but it is amazing how far you can get with generative AI coding assistants like Amazon Q Developer.
+
+So take it as a fun demo, but nothing more.
