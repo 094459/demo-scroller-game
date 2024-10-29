@@ -1,0 +1,17 @@
+{
+  "name": "titan-scrolling-game-leaderboard",
+  "version": "1.0.0",
+  "description": "A simple sideways scrolling game set on Titan",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "@2toad/profanity": "^3.0.1",
+    "aws-sdk": "^2.1691.0",
+    "cors": "^2.8.5",
+    "express": "^4.21.1",
+    "iovalkey": "^0.1.0",
+    "valkey": "^0.0.3"
+  }
+}

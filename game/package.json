@@ -1,0 +1,12 @@
+{
+  "name": "titan-scrolling-game",
+  "version": "1.0.0",
+  "description": "A simple sideways scrolling game set on Titan",
+  "main": "game.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.1"
+  }
+}
