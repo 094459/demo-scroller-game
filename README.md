@@ -1,6 +1,8 @@
-# demo-scroller-game
+# Titan Scroller
 
 This is a very simple sideways scrolling game that I put together with the help of my trusty AI coding companion, Amazon Q Developer. I am NOT a Javascript developer, but that didn't stop me creating this.
+
+![Demo screenshot of the Titan Scroller game](images/q-game-in-the-cloud.png)
 
 If you want to run this locally, then you need
 
