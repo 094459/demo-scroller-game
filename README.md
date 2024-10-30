@@ -78,6 +78,6 @@ Titan Scrolling Game server listening at http://localhost:3000
 
 ### Note!
 
-This is only a demo, and its implementation is flawed so please do **copy** it! I am not a Javascript developer, but it is amazing how far you can get with generative AI coding assistants like Amazon Q Developer.
+This is only a demo, and its implementation is flawed so please do **NOT copy** it! I am not a Javascript developer, but it is amazing how far you can get with generative AI coding assistants like Amazon Q Developer.
 
 So take it as a fun demo, but nothing more.
