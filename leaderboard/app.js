@@ -3,8 +3,12 @@ const Valkey = require("iovalkey");
 const cors = require('cors');
 const app = express();
 const { Profanity, ProfanityOptions } = require('@2toad/profanity');
-const AWS = require('aws-sdk');
+//const AWS = require('aws-sdk');
 const crypto = require('crypto');
+
+// Updated AWS SDK v3 imports
+const { SecretsManagerClient, GetSecretValueCommand } = require("@aws-sdk/client-secrets-manager");
+const { fromEnv } = require("@aws-sdk/credential-providers");
 
 
 // Create separate CORS options for the health endpoint
@@ -25,11 +29,7 @@ app.get('/health', cors(healthCorsOptions), (req, res) => {
 // if you change cors origin, remember to restart or it will ignore
 const CORS_ORIGIN = process.env.CORS_ORIGIN || '*';
 console.log(`CORS Origin configured as: ${CORS_ORIGIN}`);
-// const corsOptions = {
-//   origin: CORS_ORIGIN,
-//   methods: ['GET', 'POST'],
-//   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-// };
+
 
 const corsOptions = {
   origin: function (origin, callback) {
@@ -82,32 +82,31 @@ const client = new Valkey({
   tls: VALKEY_TLS
 });
 
-// set AWS stuff up
-const region = process.env.AWS_REGION || 'eu-west-1';
-AWS.config.update({ region: region });
-AWS.config.logger = console;
-const secretsManager = new AWS.SecretsManager();
-const credentials = new AWS.ECSCredentials();
-const RESET_SECRETKEY = process.env.RESET_SECRETKEY || 'leaderboard-reset';
-AWS.config.update({ 
-  credentials: credentials,
-  region: region 
-});
 
-// Function to get the admin password from Secrets Manager
+// Configure AWS SDK v3
+const region = process.env.AWS_REGION || 'eu-west-1';
+//const credentials = new ECSCredentials();
+const secretsManagerClient = new SecretsManagerClient({ 
+  region: region,
+  credentials: fromEnv()
+});
+const RESET_SECRETKEY = process.env.RESET_SECRETKEY || 'leaderboard-reset';
+
 async function getAdminPassword() {
   const params = {
-    SecretId: RESET_SECRETKEY, 
-    VersionStage: 'AWSCURRENT', 
+    SecretId: RESET_SECRETKEY,
+    VersionStage: 'AWSCURRENT',
   };
 
   try {
     console.log('Attempting to retrieve secret...');
-    const data = await secretsManager.getSecretValue(params).promise();
+    const command = new GetSecretValueCommand(params);
+    const data = await secretsManagerClient.send(command);
     console.log('Secret retrieved successfully');
-    if ('SecretString' in data) {
+    
+    if (data.SecretString) {
       const secret = JSON.parse(data.SecretString);
-      return secret.adminPassword; 
+      return secret.adminPassword;
     } else {
       throw new Error('Secret not found in SecretString');
     }

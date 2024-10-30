@@ -268,6 +268,76 @@ function render() {
 }
 
 
+// async function handleGameOver() {
+//     if (gameOver) {
+//       if (!hasPromptedForName && score > (highScores[highScores.length - 1]?.score || 0)) {
+//         hasPromptedForName = true;
+//         let name = '';
+//         let isValidName = false;
+//         while (!isValidName) {
+//           name = prompt('Enter your name for the high score (alphanumeric characters only):');
+//           if (name === null) {
+//             name = 'Anonymous';
+//             isValidName = true;
+//           } else if (!isAlphanumeric(name)) {
+//             alert('Please use only alphanumeric characters (A-Z, a-z, 0-9).');
+//           } else {
+//             try {
+//               const response = await fetch(`${API_URL}/api/check-profanity`, {
+//                 method: 'POST',
+//                 headers: {
+//                   'Content-Type': 'application/json',
+//                 },
+//                 body: JSON.stringify({ name }),
+//               });
+  
+//               if (!response.ok) {
+//                 throw new Error('Network response was not ok');
+//               }
+  
+//               const data = await response.json();
+//               if (data.result === 'pass') {
+//                 isValidName = true;
+//               } else {
+//                 alert('Please choose a different name. This one contains inappropriate language.');
+//               }
+//             } catch (error) {
+//               console.error('Error checking profanity:', error);
+//               alert('An error occurred while checking the name. Please try again.');
+//             }
+//           }
+//         }
+//         try {
+//           const response = await fetch(`${API_URL}/api/scores`, {
+//             method: 'POST',
+//             headers: {
+//               'Content-Type': 'application/json',
+//             },
+//             body: JSON.stringify({ name, score }),
+//           });
+  
+//           if (!response.ok) {
+//             throw new Error('Failed to add high score');
+//           }
+  
+//           const result = await response.json();
+//           const hash = result.hash;
+  
+//           // Display the hash to the player
+//           alert(`Your score has been recorded! Your unique score hash is: ${hash}\nPlease save this hash for verification.`);
+  
+//           const updatedScores = await getTopScores();
+//           highScores = updatedScores;
+//         } catch (error) {
+//           console.error('Error updating high scores:', error);
+//           alert('An error occurred while saving your score. Please try again.');
+//         }
+//       }
+//     }
+//     gameOver = true;
+
+//   }
+
 async function handleGameOver() {
     if (gameOver) {
       if (!hasPromptedForName && score > (highScores[highScores.length - 1]?.score || 0)) {
@@ -275,13 +345,24 @@ async function handleGameOver() {
         let name = '';
         let isValidName = false;
         while (!isValidName) {
-          name = prompt('Enter your name for the high score (alphanumeric characters only):');
+          name = prompt('Enter your name for the high score (max 20 alphanumeric characters):');
+          
+          // Handle cancel button press
           if (name === null) {
             name = 'Anonymous';
             isValidName = true;
-          } else if (!isAlphanumeric(name)) {
+          } 
+          // Check length and alphanumeric
+          else if (!isAlphanumeric(name)) {
             alert('Please use only alphanumeric characters (A-Z, a-z, 0-9).');
-          } else {
+          }
+          else if (name.length > 20) {
+            alert('Name must be 20 characters or less.');
+          }
+          else if (name.length === 0) {
+            alert('Name cannot be empty.');
+          }
+          else {
             try {
               const response = await fetch(`${API_URL}/api/check-profanity`, {
                 method: 'POST',
@@ -335,9 +416,7 @@ async function handleGameOver() {
       }
     }
     gameOver = true;
-
-  }
-
+}
 
 
 function checkCollision(player, hazard) {
